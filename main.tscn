@@ -1,0 +1,89 @@
+[gd_scene load_steps=14 format=3 uid="uid://dbh6diir1bjqe"]
+
+[ext_resource type="Script" uid="uid://cr83gdsa5urx1" path="res://main.gd" id="1_1bvp3"]
+[ext_resource type="Script" uid="uid://bd046eokvcnu2" path="res://addons/phantom_camera/scripts/phantom_camera_host/phantom_camera_host.gd" id="2_lquwl"]
+[ext_resource type="Script" uid="uid://csjccrhj5wnx7" path="res://addons/phantom_camera/scripts/phantom_camera/phantom_camera_3d.gd" id="3_7mycd"]
+[ext_resource type="Script" uid="uid://8umksf8e80fw" path="res://addons/phantom_camera/scripts/resources/tween_resource.gd" id="4_272bh"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_1bvp3"]
+shading_mode = 0
+albedo_color = Color(0.762427, 0.2078, 0.215418, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_1bvp3"]
+material = SubResource("StandardMaterial3D_1bvp3")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_lquwl"]
+shading_mode = 0
+albedo_color = Color(0.338407, 0.39569, 0.780841, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_7mycd"]
+material = SubResource("StandardMaterial3D_lquwl")
+
+[sub_resource type="Resource" id="Resource_5vw27"]
+script = ExtResource("4_272bh")
+duration = 1.0
+transition = 0
+ease = 2
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_1bvp3"]
+
+[sub_resource type="Sky" id="Sky_lquwl"]
+sky_material = SubResource("ProceduralSkyMaterial_1bvp3")
+
+[sub_resource type="Environment" id="Environment_7mycd"]
+background_mode = 2
+sky = SubResource("Sky_lquwl")
+ambient_light_source = 3
+
+[sub_resource type="BoxMesh" id="BoxMesh_lquwl"]
+size = Vector3(3, 10, 4)
+
+[node name="Main" type="Node3D"]
+script = ExtResource("1_1bvp3")
+
+[node name="Camera3D" type="Camera3D" parent="."]
+
+[node name="PhantomCameraHost" type="Node" parent="Camera3D"]
+process_priority = 300
+process_physics_priority = 300
+script = ExtResource("2_lquwl")
+metadata/_custom_type_script = "uid://bd046eokvcnu2"
+
+[node name="LookSpot" type="Node3D" parent="."]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="LookSpot"]
+mesh = SubResource("BoxMesh_1bvp3")
+
+[node name="MouseSpot" type="Node3D" parent="LookSpot"]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="LookSpot/MouseSpot"]
+mesh = SubResource("BoxMesh_7mycd")
+
+[node name="PhantomCamera3D" type="Node3D" parent="."]
+top_level = true
+script = ExtResource("3_7mycd")
+follow_mode = 2
+look_at_mode = 2
+tween_resource = SubResource("Resource_5vw27")
+tween_on_load = false
+follow_offset = Vector3(0, 30, 3)
+follow_damping = true
+metadata/_custom_type_script = "uid://csjccrhj5wnx7"
+
+[node name="Lighting" type="Node" parent="."]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="Lighting"]
+environment = SubResource("Environment_7mycd")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="Lighting"]
+transform = Transform3D(0.5, -0.707107, 0.5, -0.707107, -3.09086e-08, 0.707107, -0.5, -0.707107, -0.5, 0, 0, 0)
+
+[node name="ReferenceScenery" type="Node" parent="."]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="ReferenceScenery"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.70892, 0, -4.34167)
+mesh = SubResource("BoxMesh_lquwl")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="ReferenceScenery"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15.2911, 0, 6.65833)
+mesh = SubResource("BoxMesh_lquwl")
