@@ -1,7 +1,7 @@
 class_name Main extends Node3D
 
 @onready var look_spot: Node3D = $LookSpot
-@onready var mouse_spot: Node3D = $LookSpot/MouseSpot
+@onready var mouse_spot: Node3D = $MouseSpot
 
 @onready var camera: PhantomCamera3D = $PhantomCamera3D
 
